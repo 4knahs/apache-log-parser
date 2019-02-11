@@ -20,7 +20,7 @@ class PluginWrapper:
 
     def __call__(self, conn, args):
 
-        plug = self.plugin(args)
+        plug = self.plugin(args=args)
         ts = self.plugin.__dict__.get('TIMERS',[])
         for t in ts:
             self.schedule_timer(plug, t)

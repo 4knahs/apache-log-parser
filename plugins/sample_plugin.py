@@ -6,7 +6,7 @@ class Plugin:
     # Add the time periods at which you want to receive an EVENT_TIMER
     TIMERS = [] 
 
-    def __init__(self, args):
+    def __init__(self, args=[]):
         pass
 
     def __call__(self, event, parameters):

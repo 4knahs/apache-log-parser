@@ -12,7 +12,7 @@ class Plugin:
     WINDOW = 120
     TIMERS = [10]
 
-    def __init__(self, args):
+    def __init__(self, args=[]):
 
         if len(args) > 0:
             self.threshold = int(args[0])
