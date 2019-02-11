@@ -12,11 +12,11 @@ class PluginManager:
         self.plugs = []
         self.processes = []
 
-    def register_plug(self, clas):
+    def register_plug(self, clas, args):
         parent_conn, child_conn = Pipe()
         self.plugs.append(parent_conn)
 
-        p = Process(target=PluginWrapper(clas), args=(child_conn,))
+        p = Process(target=PluginWrapper(clas), args=(child_conn,args))
         self.processes.append(p)
 
         p.start()
@@ -36,7 +36,7 @@ class PluginManager:
             except:
                 continue
 
-    def load_plugins(self):
+    def load_plugins(self, args_plug):
         plugin_files = [f for f in listdir('./plugins/') if isfile(join('./plugins/', f))]
 
         debug(plugin_files)
@@ -49,7 +49,7 @@ class PluginManager:
                     exec('import {}'.format(module_name))
                     mod = sys.modules[module_name]
                     clas = mod.Plugin
-                    self.register_plug(clas)
+                    self.register_plug(clas, args_plug)
 
             except Exception as e: # TODO: handle expected exceptions and do proper error printing 
                 error('Failed to load plugin: {}'.format(p))

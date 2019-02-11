@@ -10,10 +10,15 @@ import math
 class Plugin:
 
     WINDOW = 120
-    THRESHOLD = 10
-    TIMERS = [10, WINDOW]
+    TIMERS = [10]
 
-    def __init__(self):
+    def __init__(self, args):
+
+        if len(args) > 0:
+            self.threshold = int(args[0])
+        else:
+            self.threshold = 10
+
         self.paths = {}
         self.codes = {}
         self.users = {}
@@ -24,7 +29,6 @@ class Plugin:
         self.time_buckets = [[] for i in range(self.WINDOW)]
         self.current_index = 0
         self.last_event = None
-
 
     def __call__(self, event, parameter):
 
@@ -118,9 +122,10 @@ class Plugin:
         self.print_stat('Watchlist', {
             'Avg. frequency': avg,
             'Total requests': total,
+            'Threshold': self.threshold,
             }, value_title='value')
 
-        if avg >= self.THRESHOLD:
+        if avg >= self.threshold:
             self.print_stat('ALERT', 
                 {'High traffic': 'hits = {}, triggered at {}'.format(avg, datetime.datetime.now())}, 
                 value_title='Status')

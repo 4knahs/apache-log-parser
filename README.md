@@ -20,20 +20,27 @@ To run the parser against a log file do as follows:
 python main.py -l <log-file>
 ```
 
+To set the threshold for the frequency alerts one can use the `-p` flag. E.g.:
+
+```bash
+python main.py -l <log-file> -p <number-of-requests-in-a-minute>
+```
+
 For help:
 
 ```bash
-$ python main.py -h
-usage: main.py [-h] [-f] [-l FILE] [-v] [-s]
+$ python3 main.py -h
+usage: main.py [-h] [-f] [-l FILE] [-v] [-p PLUGS [PLUGS ...]] [-s]
 
 Reads logs in the Apache Combined Log Format and the Common Log Format.
 
 optional arguments:
-  -h, --help  show this help message and exit
-  -f          Tail the log file.
-  -l FILE     Path to logfile.
-  -v          Enable verbose.
-  -s          Silent. Superseedes -v and disables logging.
+  -h, --help            show this help message and exit
+  -f                    Tail the log file.
+  -l FILE               Path to logfile.
+  -v                    Enable verbose.
+  -p PLUGS [PLUGS ...]  Arguments for the plugins. Splitted with spaces
+  -s                    Silent. Superseedes -v and disables logging.
 ```
 
 ## Docker run
@@ -148,5 +155,7 @@ What could improve:
 
 * Log rotation - many apps with logs use logrotate, in such case it would be worth to had inotify capabilities to check when the file gets moved.
 * Single threaded scheduling of events - atm there is a ThreadTimer per timed event, this could/should easily be a single thread with a queue of waiting times.
-* Monitoring of pipes - should assure that event production/consumption is not lagging behind. 
+* Monitoring of pipes - should assure that event production/consumption is not lagging behind.
+* Alert plugins - this is a special case for plugins and could be further specialized into its own wrapper to ease the creation of more alerts.
+* Alert handling - it would be benefitial to split the alerts into its own process.
 

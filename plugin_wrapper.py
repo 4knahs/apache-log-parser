@@ -18,9 +18,9 @@ class PluginWrapper:
         TimerThread(stop_event, time, plug).start()
         self.timer_events.append(stop_event)
 
-    def __call__(self, conn):
+    def __call__(self, conn, args):
 
-        plug = self.plugin()
+        plug = self.plugin(args)
         ts = self.plugin.__dict__.get('TIMERS',[])
         for t in ts:
             self.schedule_timer(plug, t)
