@@ -18,6 +18,7 @@ class Plugin:
         self.codes = {}
         self.users = {}
         self.hosts = {}
+        self.on_alert = False
 
         # Will use 1s buckets of log events on a "circular buffer"
         self.time_buckets = [[] for i in range(self.WINDOW)]
@@ -43,7 +44,7 @@ class Plugin:
             self.stats_event()  
 
             # Generates alerts
-            self.alert()      
+            self.alert()
         
         else:
             warn('Unexpected event {}'.format(event))
@@ -120,13 +121,25 @@ class Plugin:
             }, value_title='value')
 
         if avg >= self.THRESHOLD:
-            self.print_stat('ALERT', {'High traffic': 'hits = {}, triggered at {}'.format(avg, datetime.datetime.now())})
+            self.print_stat('ALERT', 
+                {'High traffic': 'hits = {}, triggered at {}'.format(avg, datetime.datetime.now())}, 
+                value_title='Status')
             if not silent:
                 for r in self.list_requests():
                     print(r)
+
+            self.on_alert = True
             return True
-        
+
+        # Alert is over
+        if self.on_alert:
+            self.alert_recover()
+
+        self.on_alert = False
         return False
+
+    def alert_recover(self):
+        self.print_stat('ALERT', {'High traffic': 'Recovered!'}, value_title='Status')
 
     def stats_event(self):
         collections = [self.paths, self.codes, self.users, self.hosts]

@@ -142,6 +142,7 @@ For more information regarding the format check the [httpd apache log documentat
 * Processing of parsed logs is done by plugins.
 * Plugins abstract processes and receive the parsed logs via pipes / message passing.
 * Each process has its own timer threads to schedule events.
+* Circular buffers were used for window based statistics and alerts.
 
 What could improve:
 
