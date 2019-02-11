@@ -36,6 +36,24 @@ optional arguments:
   -s          Silent. Superseedes -v and disables logging.
 ```
 
+## Docker run
+
+If your log file is at `/tmp/access.log` you can run the docker as follows:
+
+```bash
+docker build -t parser .
+# It expects the log to be at /tmp/access.log
+docker run -v /tmp:/tmp parser
+```
+
+Otherwise, you can specify another log file:
+
+```bash
+docker run -v /tmp:/tmp parser -l /tmp/<another-log-name>.log
+```
+
+This is specially useful if using log generation described on later sections.
+
 ## Plugins
 
 Plugins are added by creating a new python file in the plugins folder.

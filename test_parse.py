@@ -1,7 +1,42 @@
 import unittest
 from parser import parse_line, CLF, CLFRequest
+import plugins.stats as pstats
+from event_types import EVENT_LOG, EVENT_TIMER
 
-class TestCrawler(unittest.TestCase):
+class TestParser(unittest.TestCase):
+
+    def test_alerts(self):
+
+        # We will just repeat the same line multiple times to simulate a high request/rate
+        line = parse_line('172.16.0.3 - - [25/Sep/2002:14:04:19 +0200] "GET / HTTP/1.1" 401 - "" "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.1) Gecko/20020827"')
+
+        stats = pstats.Plugin()
+
+        for _ in range(10*120):
+            stats(EVENT_LOG, line)
+
+        # As requested the alert prints the requests, here we pass silent=True to omit those lines
+        self.assertEqual(stats.alert(silent=True), True)
+
+        # Event 5 minutes after the previous ones should clear the alert
+        line = parse_line('172.16.0.3 - - [25/Sep/2002:14:09:19 +0200] "GET / HTTP/1.1" 401 - "" "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.1) Gecko/20020827"')
+
+        # Process event
+        stats(EVENT_LOG, line)
+
+        self.assertEqual(stats.alert(silent=True), False)
+
+        # 119 events exactly one minute and 59 seconds after last event
+        line = parse_line('172.16.0.3 - - [25/Sep/2002:14:11:18 +0200] "GET / HTTP/1.1" 401 - "" "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.1) Gecko/20020827"')
+
+        for _ in range(10*120 - 1):
+            stats(EVENT_LOG, line)
+
+        self.assertEqual(stats.alert(silent=True), True)
+
+    def test_top_pages(self):
+        # TODO: hire me to implement this method :P
+        pass
 
     def test_line_parser(self):
 

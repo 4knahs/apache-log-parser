@@ -1,3 +1,4 @@
 inotify==0.2.10
 table-logger==0.3.4 
 numpy==1.16.1
+python-dateutil

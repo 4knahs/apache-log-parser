@@ -20,7 +20,7 @@ def opened_w_error(filename, mode="r"):
 
 def to_datetime(str):
     d = parse(str[:11] + " " + str[12:])
-    debug('{} converted to {}'.format(str, d))
+    #debug('{} converted to {}'.format(str, d))
     return d
 
 def top_path(path):

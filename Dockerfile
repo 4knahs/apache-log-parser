@@ -1,5 +1,6 @@
 FROM python:3
-RUN touch /var/log/access.log  # since the program will read this by default
+RUN touch /tmp/access.log
 WORKDIR /usr/src
 ADD . /usr/src
-ENTRYPOINT ["python", "main.py"]# this is an example for a python program, pick the language of your choice
+RUN pip install -r requirements.txt
+ENTRYPOINT ["python", "main.py", "-f"]
