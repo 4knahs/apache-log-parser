@@ -61,45 +61,45 @@ class Plugin:
             warn('Unexpected event {}'.format(event))
 ```
 
-Check the plugins/sample_plugin.py for an example.
+Check the `plugins/sample_plugin.py` for an example.
 
 ## Plugin Events
 
-The event types are defined in event_types.py. 
+The event types are defined in `event_types.py`. 
 
 ### EVENT_LOG Event
 
-When the event is LOG the parameters consist of a dictionary with the clf and request key.
-The clf (parameters['clf']) is a named tuple, thus one can access the fields like clf.remote_host.
+When the event is a log, the parameters consist of a dictionary with the `clf` and `request` keys.
+The clf (`parameters['clf']`) is a named tuple, thus one can access the fields like `clf.remote_host`.
 The available fields are:
 
-* remote_host
-* rfc931
-* auth_user
-* date
-* request
-* status
-* bytes
+* `remote_host`
+* `rfc931`
+* `auth_user`
+* `date`
+* `request`
+* `status`
+* `bytes`
 
-The request (parameters['request']) consists of the parsed request field from clf.
+The request (`parameters['request']`) consists of the parsed request field from clf.
 Similarly the available fields are:
 
-* method
-* path
-* version
+* `method`
+* `path`
+* `version`
 
-There is a sample_plugin.py file that you can use to create your first plugin.
-For more details on the format of the fields check the [W3 Logging documentation](https://www.w3.org/Daemon/User/Config/Logging.html) or check the tests in test_parse.py.
+There is a `sample_plugin.py` file that you can use to create your first plugin.
+For more details on the format of the fields check the [W3 Logging documentation](https://www.w3.org/Daemon/User/Config/Logging.html) or check the tests in `test_parse.py`.
 
 ### EVENT_TIMER Event
 
-Occurs at the times specified by the TIMERS list declared in the respective plugin class (if present).
+Occurs at the times specified by the `TIMERS` list declared in the respective plugin class (if present).
 Its parameter is the frequency of the timer.
-Check plugins/stats.py for an example on how to use the timers.
+Check `plugins/stats.py` for an example on how to use the timers.
 
 ## Generating logs
 
-To generate apache logs in /tmp do the following:
+To generate apache logs in `/tmp` do the following:
 
 ```bash
 cd access_log_generator
@@ -129,11 +129,3 @@ What could improve:
 * Single threaded scheduling of events - atm there is a ThreadTimer per timed event, this could/should easily be a single thread with a queue of waiting times.
 * Monitoring of pipes - should assure that event production/consumption is not lagging behind. 
 
-For example, to rotate the logs on an hourly basis just run:
-
-```bash
-cd log_rotation
-logrotate $(pwd)/logrotate.conf --state $(pwd)/logrotate-state --verbose
-```
-
-Note that logrotate is supposed to run on as a cron job.
