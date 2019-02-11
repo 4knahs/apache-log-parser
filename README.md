@@ -1,5 +1,7 @@
 # Common Log Format Parser
 
+App that consumes actively written-to [w3c-formatted HTTP access logs](https://www.w3.org/Daemon/User/Config/Logging.html).
+
 ## Requirements
 
 This app was tested with Python 3.5.2.
